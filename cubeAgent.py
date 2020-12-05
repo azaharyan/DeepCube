@@ -2,7 +2,7 @@ import numpy as np
 from cubeEnv import CubeEnv
 
 class CubeAgent():
-    def __init__(self, n_time_steps = 30, seed = 0):
+    def __init__(self, n_time_steps = 3, seed = 0):
         self.env = CubeEnv(1, seed)
         self.n_time_steps = n_time_steps
 
