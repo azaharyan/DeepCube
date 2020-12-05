@@ -1,4 +1,5 @@
 import numpy as np
+from cubeEnv import CubeEnv
 
 class CubeAgent():
     def __init__(self, n_time_steps = 30, seed = 0):
@@ -9,5 +10,8 @@ class CubeAgent():
         i = 0
         while(i < self.n_time_steps):
             action = self.env.sample(policy)
-            state_p, reward = self.env.step(action)
+            _, reward = self.env.step(action)
             i += 1
+            if self.env.is_solved():
+                print("cube solved")
+                break
