@@ -20,7 +20,7 @@ class CubeEnv():
 
         return old_state, reward
 
-    def reset(self, number_of_turns = 1):
+    def reset(self, number_of_turns = 0):
         self.current_step = 0
         self.cube = pc.Cube()
         self.scramble(number_of_turns)
