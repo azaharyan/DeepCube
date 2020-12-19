@@ -9,8 +9,5 @@ def adi(iterations=10):
 
         # iterate through the number of cubes and the number of actions
         for i in range(len(cubes.env)):
-            for a in range(len(cubes.env[i].action_space)):
-                
-                
-
-adi(1)
+            for _ in range(len(cubes.env[i].action_space)):
+                pass
