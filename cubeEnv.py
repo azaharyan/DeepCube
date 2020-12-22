@@ -1,6 +1,50 @@
 import pycuber as pc
 import numpy as np
 
+corner_colours = [
+    {'white', 'orange', 'blue'},
+    {'white', 'orange',  'green'},
+    {'white', 'red',  'green'},
+    {'white', 'red', 'blue'},
+    {'yellow', 'orange', 'blue'},
+    {'yellow', 'orange',  'green'},
+    {'yellow', 'red',  'green'},
+    {'yellow', 'red', 'blue'}
+]
+
+corner_colour_map = {
+    'white': 0,
+    'yellow': 0,
+    'blue': 1,
+    'green':1,
+    'orange': 2,
+    'red': 2
+}
+
+edge_colours = [
+    {'white', 'blue'},
+    {'white', 'orange'},
+    {'white', 'green'},
+    {'white', 'red'},
+    {'yellow', 'blue'},
+    {'yellow', 'orange'},
+    {'yellow', 'green'},
+    {'yellow', 'red'},
+    {'orange', 'blue'},
+    {'blue', 'red'},
+    {'green', 'red'},
+    {'orange', 'green'},
+]
+
+edge_colour_map = {
+    'white': 0,
+    'yellow': 0,
+    'blue': 0,
+    'green':1,
+    'orange': 1,
+    'red': 1
+}
+
 class CubeEnv():
     def __init__(self, number_of_turns = 0, seed = 0):
         self.cube = pc.Cube()
@@ -10,53 +54,6 @@ class CubeEnv():
 
         self.__set_seed(seed)
         self.reset(number_of_turns)
-
-        self.__corner_colours = [
-            {'white', 'orange', 'blue'},
-            {'white', 'orange',  'green'},
-            {'white', 'red',  'green'},
-            {'white', 'red', 'blue'},
-            {'yellow', 'orange', 'blue'},
-            {'yellow', 'orange',  'green'},
-            {'yellow', 'red',  'green'},
-            {'yellow', 'red', 'blue'}
-        ]
-
-        self.__colour_map = {
-            'white': 0,
-            'yellow': 0,
-            'blue': 1,
-            'green':1,
-            'orange': 2,
-            'red': 2
-        }
-
-        self.__edge_colours = [
-            ['white', 'blue'],
-            ['white', 'orange'],
-            ['white', 'green'],
-            ['white', 'red'],
-            ['yellow', 'blue'],
-            ['yellow', 'orange'],
-            ['yellow', 'green'],
-            ['yellow', 'red'],
-            ['blue', 'white'],
-            ['orange', 'white'],
-            ['green', 'white'],
-            ['red','white'],
-            ['blue','yellow'],
-            ['orange', 'yellow'],
-            ['green', 'yellow'],
-            ['red', 'yellow'],
-            ['orange', 'blue'],
-            ['blue', 'orange'],
-            ['green', 'orange'],
-            ['orange', 'green'],
-            ['red', 'blue'],
-            ['blue', 'red'],
-            ['green', 'red'],
-            ['red', 'green']
-        ]
 
     def step(self, action):
         old_state = self.cube.copy()
@@ -101,12 +98,12 @@ class CubeEnv():
         for corner in corners:
             keys = list(corner.facings.keys())
             keys.sort()
-            state[i][3*self.__corner_colours.index(set(map(lambda x: x.colour, corner.facings.values()))) + self.__colour_map[corner.facings[keys[0]].colour]] = 1
+            state[i][3*corner_colours.index(set(map(lambda x: x.colour, corner.facings.values()))) + corner_colour_map[corner.facings[keys[0]].colour]] = 1
             i += 1
         for edge in edges:
             keys = list(edge.facings.keys())
             keys.sort()
-            state[i][self.__edge_colours.index(list(map(lambda key: edge.facings[key].colour, keys)))] = 1
+            state[i][2*edge_colours.index(set(map(lambda key: edge.facings[key].colour, keys))) + edge_colour_map[edge.facings[keys[0]].colour]] = 1
             i += 1
         return state
 
