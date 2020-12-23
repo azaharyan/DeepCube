@@ -107,5 +107,8 @@ class CubeEnv():
             i += 1
         return state
 
+    def get_action_space(self):
+        return self.action_space
+
     def __set_seed(self,seed=0):
         np.random.seed(seed)
