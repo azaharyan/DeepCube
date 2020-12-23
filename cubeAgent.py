@@ -34,6 +34,6 @@ class CubeAgent():
         while (i < self.number_of_cubes):
             self.env[i].reset(number_of_turns[i])
             i += 1
-            
+     
     def get_cube(self, index=0):
         return self.env[index].cube
