@@ -1,5 +1,6 @@
 import pycuber as pc
 import numpy as np
+from copy import deepcopy
 
 corner_colours = [
     {'white', 'orange', 'blue'},
@@ -107,5 +108,11 @@ class CubeEnv():
             i += 1
         return state
 
+    def get_action_space(self):
+        return self.action_space
+
     def __set_seed(self,seed=0):
         np.random.seed(seed)
+
+    def set_state(self, state):
+        self.cube = state

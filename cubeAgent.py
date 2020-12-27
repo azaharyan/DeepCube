@@ -7,11 +7,11 @@ class CubeAgent():
         self.n_time_steps = n_time_steps
         self.number_of_cubes = number_of_cubes
 
-    def scrabmle_cubes_for_data(self):
+    def scrabmle_cubes_for_data(self, number_of_turns = 100):
         i = 1
         while (i < self.number_of_cubes):
             self.env[i].cube = self.env[i-1].cube.copy()
-            self.env[i].scramble(1)
+            self.env[i].scramble(number_of_turns)
             i += 1
 
     def take_actions(self, policy):
@@ -34,3 +34,6 @@ class CubeAgent():
         while (i < self.number_of_cubes):
             self.env[i].reset(number_of_turns[i])
             i += 1
+     
+    def get_cube(self, index=0):
+        return self.env[index].cube
