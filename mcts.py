@@ -29,9 +29,9 @@ class MCTS:
                 found = True
 
         if found:
-            return solved
+            return solved, path_to_leaf
         else:
-            return None
+            return None, None
 
     def traverse(self, state):
         path_to_leaf = []

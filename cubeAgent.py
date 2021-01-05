@@ -3,14 +3,13 @@ from cubeEnv import CubeEnv
 
 class CubeAgent:
     def __init__(self, number_of_cubes=3, n_time_steps=2, seed=0):
-        self.env = [CubeEnv()] * number_of_cubes
+        self.env = [CubeEnv() for i in range(number_of_cubes)]
         self.n_time_steps = n_time_steps
         self.number_of_cubes = number_of_cubes
 
     def scrabmle_cubes_for_data(self, number_of_turns=100):
-        i = 1
+        i = 0
         while i < self.number_of_cubes:
-            self.env[i].cube = self.env[i - 1].cube.copy()
             self.env[i].scramble(number_of_turns)
             i += 1
 
