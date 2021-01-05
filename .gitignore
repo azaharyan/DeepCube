@@ -131,3 +131,5 @@ dmypy.json
 .vscode
 
 .idea
+
+saved_model_old/
