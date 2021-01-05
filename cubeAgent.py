@@ -2,7 +2,8 @@ from cubeEnv import CubeEnv
 
 
 class CubeAgent:
-    def __init__(self, number_of_cubes=3, n_time_steps=2, seed=0):
+
+    def __init__(self, number_of_cubes=3, n_time_steps=2):
         self.env = [CubeEnv() for i in range(number_of_cubes)]
         self.n_time_steps = n_time_steps
         self.number_of_cubes = number_of_cubes
