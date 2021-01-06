@@ -9,12 +9,12 @@ class CubeAgent:
         self.number_of_cubes = number_of_cubes
         self.batches = batches
 
-    def scrabmle_cubes_for_data(self):
+    def scramble_cubes_for_data(self):
 
         for i in range(self.number_of_cubes):
             j = 1
             while j < self.batches:
-                self.env[i][j] = self.env[i][j-1].copy()
+                self.env[i][j].cube = self.env[i][j-1].cube.copy()
                 self.env[i][j].scramble()
                 j += 1
 
@@ -25,6 +25,3 @@ class CubeAgent:
         while i < self.number_of_cubes:
             self.env[i].reset(number_of_turns[i])
             i += 1
-
-    def get_cube(self, index=0):
-        return self.env[index].cube
