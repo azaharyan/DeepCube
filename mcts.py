@@ -21,17 +21,14 @@ class MCTS:
         self.rollout(leaf)
         self.backpropagate(path_to_leaf, actions_to_leaf, reward)
 
-        solved = []
-        found = False
+        i = 0
         for s in self.children[leaf]:
             if s.is_solved():
-                solved.append(s)
-                found = True
+                actions_to_leaf.append(i)
+                return actions_to_leaf
+            i += 1
 
-        if found:
-            return solved, path_to_leaf
-        else:
-            return None, None
+        return None
 
     def traverse(self, state):
         path_to_leaf = []
