@@ -47,7 +47,7 @@ edge_colour_map = {
 
 
 class CubeEnv:
-    def __init__(self, number_of_turns=0, seed=0, cube=None):
+    def __init__(self, number_of_turns=0, seed=None, cube=None):
         assert number_of_turns == 0 or cube is None  # can't provide both at the same time
 
         if cube is None:
@@ -60,7 +60,8 @@ class CubeEnv:
         self.action_space = ["F", "B", "L", "R", "U", "D", "F'", "B'", "L'", "R'", "U'", "D'"]
         self.current_step = 0
 
-        self.__set_seed(seed)
+        if seed is not None:
+            self.__set_seed(seed)
 
         if cube is None:
             self.reset(number_of_turns)
@@ -94,7 +95,7 @@ class CubeEnv:
         while i < number_of_turns:
             i += 1
             formula += np.random.choice(self.action_space) + " "
-        formula.rstrip()
+        formula = formula.rstrip()
         self.cube(formula)
 
     def get_one_hot_state(self):

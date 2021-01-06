@@ -6,9 +6,9 @@ from cubeAgent import CubeAgent
 from model import buildModel, compile_model
 import datetime
 
-def adi(iterations=10):
+def adi(iterations=100):
     model = buildModel(20*24)
-    compile_model(model, 0.01)
+    compile_model(model, 0.001)
     for _ in range(iterations):
 
         # generate N scrambled cubes
@@ -48,7 +48,7 @@ def adi(iterations=10):
 
         model.fit(encodedStates, { "output_policy": policies, "output_value": values },
                  epochs=15)
-    
+        model.save('saved_model')
     return model
 
 if __name__ == "__main__":

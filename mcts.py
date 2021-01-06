@@ -26,7 +26,6 @@ class MCTS:
             if s.is_solved():
                 actions_to_leaf.append(i)
                 return actions_to_leaf
-
             i += 1
 
         return None
