@@ -132,4 +132,5 @@ dmypy.json
 
 .idea
 
+saved_model/
 saved_model_old/

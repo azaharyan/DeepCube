@@ -11,7 +11,7 @@ if __name__ == "__main__":
     #compile_model(model, 0.001)
 
     mcts = MCTS(model)
-    cube = CubeEnv(number_of_turns=1)
+    cube = CubeEnv(number_of_turns=3)
     result = None
 
     cube.render()

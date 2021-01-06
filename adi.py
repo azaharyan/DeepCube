@@ -13,7 +13,7 @@ def adi(iterations=100):
 
         # generate N scrambled cubes
         cubes = CubeAgent(number_of_cubes=150)
-        cubes.scrabmle_cubes_for_data(number_of_turns=3)
+        cubes.scrabmle_cubes_for_data(number_of_turns=300)
 
         #initialize the training parameters -> marked by X and Y in the paper
         encodedStates = np.empty((len(cubes.env), 20*24)) 
