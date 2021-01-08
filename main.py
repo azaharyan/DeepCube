@@ -15,9 +15,12 @@ if __name__ == "__main__":
 
     cube.render()
 
-    actions_to_leaf = None
-    while not actions_to_leaf:
-        actions_to_leaf = mcts.train(cube)
+    pair = (None, None)
+    while not pair[0]:
+        pair = mcts.train(cube)
 
     action_space = cube.get_action_space()
-    print([action_space[action_index] for action_index in actions_to_leaf])
+    print("naive: ")
+    print([action_space[action_index] for action_index in pair[0]])
+    print("bfs: ")
+    print([action_space[action_index] for action_index in pair[1]])
