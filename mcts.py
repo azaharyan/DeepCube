@@ -145,7 +145,7 @@ class MCTS:
         queue = deque()
         queue.append(state)
         while len(queue) != 0:
-            current = queue.pop()
+            current = queue.popleft()
             if current.is_solved():
                 solved = current
                 break
