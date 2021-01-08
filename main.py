@@ -12,12 +12,15 @@ if __name__ == "__main__":
 
     mcts = MCTS(model)
     cube = CubeEnv(number_of_turns=3)
-    result = None
 
     cube.render()
 
-    while not result:
-        result, actions = mcts.train(cube)
+    pair = (None, None)
+    while not pair[0]:
+        pair = mcts.train(cube)
 
-    result[0].render()
-    print(actions[0].render())
+    action_space = cube.get_action_space()
+    print("naive: ")
+    print([action_space[action_index] for action_index in pair[0]])
+    print("bfs: ")
+    print([action_space[action_index] for action_index in pair[1]])
