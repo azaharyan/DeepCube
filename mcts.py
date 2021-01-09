@@ -42,7 +42,7 @@ class MCTS:
             if current not in self.children or not self.children[current]:
                 return path_to_leaf, actions_to_leaf, current
             else:
-                not_explored_children = [child for child in self.children[current] if child not in self.children.keys()]
+                not_explored_children = [child for child in self.children[current] if child not in self.children]
                 if not_explored_children:
                     first_not_explored_child = not_explored_children[0]
                     action_index_to_first_not_explored_child = self.children[current].index(first_not_explored_child)
