@@ -53,7 +53,7 @@ class MCTS:
                     action_index = self.get_most_promising_action_index(current)
                     path_to_leaf.append(current)
                     actions_to_leaf.append(action_index)
-                    current = self.children[state][action_index]
+                    current = self.children[current][action_index]
 
     def expand(self, state):
         value, policy = self.model.predict(np.array(state.get_one_hot_state()).flatten()[None, :])
