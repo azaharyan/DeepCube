@@ -1,56 +1,77 @@
 import numpy as np
-
-from cubeAgent import CubeAgent
+import tensorflow as tf
+from tensorflow import keras
+from copy  import deepcopy
+import datetime
 from model import buildModel, compile_model
+from cubeAgent import CubeAgent
+import time
 
+model_path = F"/content/gdrive/My Drive/save_model" 
 
-def adi(iterations=100):
-    model = buildModel(20 * 24)
+def adi(iterations=10000):
+    model = buildModel(20*24)
     compile_model(model, 0.001)
+    for it in range(iterations):
 
-    for _ in range(iterations):
+        # generate N scrambled cubes
+        l = 100
+        k = 20
+        cube_agent = CubeAgent(number_of_cubes=l, batches=k)
 
-        cube_agent = CubeAgent(number_of_cubes=150)
-        # generate number_of_cubes * incrementally scrambled cubes (up to batches)
+        start_time = time.time()
         cube_agent.scramble_cubes_for_data()
+        end_time = time.time()
 
-        for cubes in cube_agent.env:
+        print(end_time-start_time)
 
-            # initialize the training parameters -> marked by X and Y in the paper
-            encoded_states = np.empty((len(cubes), 20 * 24))
-            values = np.empty((len(cubes), 1))
-            policies = np.empty(len(cubes))
+        
+        cubes = np.array(cube_agent.env).flatten()
 
-            # iterate through the number of cubes and the number of actions
-            for i, state in enumerate(cubes):
-                values_for_state = np.zeros(len(state.action_space))
+        #initialize the training parameters -> marked by X and Y in the paper
+        encodedStates = np.empty((k*l, 20*24)) 
+        values = np.empty((k*l, 1))
+        policies = np.empty(k*l)
 
-                encoded_states[i] = np.array(state.get_one_hot_state().flatten())
-                actions = state.action_space
+        # iterate through the number of cubes and the number of actions
+        i = 0
+        for _ , state in enumerate(cubes):
+            valuesForState = np.zeros(len(state.action_space))
 
-                start_state = state.cube.copy()
+            encodedStates[i] = np.array(state.get_one_hot_state().flatten())
+            actions = state.action_space
 
-                # 1-depth BFS
-                for j, action in enumerate(actions):
-                    _, reward = state.step(j)
-                    child_state_encoded = np.array(state.get_one_hot_state()).flatten()
-                    state.set_state(start_state)  # set back to the original
+            start_state = state.cube.copy()
 
-                    value, _ = model.predict(child_state_encoded[None, :])
-                    value_number = value[0][0]
-                    values_for_state[j] = value_number + reward
+            #1-depth BFS 
+            for j, action in enumerate(actions):
+                _ , reward = state.step(j)
+                childStateEncoded = np.array(state.get_one_hot_state()).flatten()
+                state.set_state(start_state) #set back to the original
 
-                values[i] = np.array([values_for_state.max()])
-                policies[i] = values_for_state.argmax()
+                value, _ = model.predict(childStateEncoded[None, :])
+                valueNumber = value[0][0]
+                valuesForState[j] = valueNumber + reward
 
-            # log into Tensorboad
-            # log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-            # tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
+            values[i] = np.array([valuesForState.max()])
+            policies[i] = valuesForState.argmax()
+            i += 1
+        
+        if it % 500 == 0:
+          print("Iteration ", it)
+        #log into Tensorboad
+        log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
 
-            model.fit(encoded_states, {"output_policy": policies, "output_value": values}, epochs=15)
-            model.save('saved_model')
+        sample_weight = np.array([[1/(i+1) for i in range(k)] for j in range(l)]).flatten()
+
+        model.fit(encodedStates,
+                 { "output_policy": policies, "output_value": values },
+                 epochs=15, sample_weight=sample_weight)
+        model.save(model_path)
     return model
 
-
 if __name__ == "__main__":
+
     model = adi()
+    
