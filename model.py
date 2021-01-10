@@ -4,15 +4,14 @@ from tensorflow import keras
 
 def buildModel(input_size):
     input = keras.Input(shape=(input_size,))
-    initializer = tf.keras.initializers.GlorotNormal()
 
-    first_layer = tf.keras.layers.Dense(4096, activation='elu', kernel_initializer=initializer)(input)
-    second_layer = tf.keras.layers.Dense(2048, activation='elu', kernel_initializer=initializer)(first_layer)
-    third_layer_value = tf.keras.layers.Dense(512, activation='elu', kernel_initializer=initializer)(second_layer)
-    third_layer_policy = tf.keras.layers.Dense(512, activation='elu', kernel_initializer=initializer)(second_layer)
+    first_layer = tf.keras.layers.Dense(4096, activation='elu')(input)
+    second_layer = tf.keras.layers.Dense(2048, activation='elu')(first_layer)
+    third_layer_value = tf.keras.layers.Dense(512, activation='elu')(second_layer)
+    third_layer_policy = tf.keras.layers.Dense(512, activation='elu')(second_layer)
 
-    value_output = tf.keras.layers.Dense(1, kernel_initializer=initializer, name="output_value")(third_layer_value)
-    policy_output = tf.keras.layers.Dense(12, activation='softmax', kernel_initializer=initializer,
+    value_output = tf.keras.layers.Dense(1, name="output_value")(third_layer_value)
+    policy_output = tf.keras.layers.Dense(12, activation='softmax',
                                           name="output_policy")(third_layer_policy)
 
     model = tf.keras.Model(inputs=input, outputs=[value_output, policy_output])
