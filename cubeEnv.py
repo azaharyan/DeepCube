@@ -137,7 +137,7 @@ class CubeEnv:
         np.random.seed(seed)
 
     def set_state(self, state):
-        self.cube = state
+        self.cube = state.copy()
 
     def __eq__(self, other):
         if not isinstance(other, CubeEnv):
