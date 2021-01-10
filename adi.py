@@ -5,13 +5,18 @@ from copy  import deepcopy
 import datetime
 from model import buildModel, compile_model
 from cubeAgent import CubeAgent
-import time
+import os
 
-model_path = F"/content/gdrive/My Drive/save_model" 
+model_path = "/content/drive/My Drive/Colab Notebooks/rubiks" 
 
 def adi(iterations=10000):
-    model = buildModel(20*24)
-    compile_model(model, 0.001)
+    model = None
+    if os.path.exists(model_path):
+        model = keras.models.load_model(model_path)
+    else:
+        model = buildModel(20*24)
+        compile_model(model, 0.001)
+
     for it in range(iterations):
 
         # generate N scrambled cubes
@@ -19,11 +24,7 @@ def adi(iterations=10000):
         k = 20
         cube_agent = CubeAgent(number_of_cubes=l, batches=k)
 
-        start_time = time.time()
         cube_agent.scramble_cubes_for_data()
-        end_time = time.time()
-
-        print(end_time-start_time)
 
         
         cubes = np.array(cube_agent.env).flatten()
@@ -35,7 +36,7 @@ def adi(iterations=10000):
 
         # iterate through the number of cubes and the number of actions
         i = 0
-        for _ , state in enumerate(cubes):
+        for stateNumber , state in enumerate(cubes):
             valuesForState = np.zeros(len(state.action_space))
 
             encodedStates[i] = np.array(state.get_one_hot_state().flatten())
@@ -49,7 +50,7 @@ def adi(iterations=10000):
                 childStateEncoded = np.array(state.get_one_hot_state()).flatten()
                 state.set_state(start_state) #set back to the original
 
-                value, _ = model.predict(childStateEncoded[None, :])
+                value, policy = model.predict(childStateEncoded[None, :])
                 valueNumber = value[0][0]
                 valuesForState[j] = valueNumber + reward
 
@@ -57,8 +58,6 @@ def adi(iterations=10000):
             policies[i] = valuesForState.argmax()
             i += 1
         
-        if it % 500 == 0:
-          print("Iteration ", it)
         #log into Tensorboad
         log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)

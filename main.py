@@ -4,6 +4,8 @@ from model import buildModel, compile_model
 from tensorflow import keras
 
 if __name__ == "__main__":
+
+    print(keras.__version__)
     model = keras.models.load_model('saved_model')
 
     #for new model
