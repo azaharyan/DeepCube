@@ -48,6 +48,7 @@ class MCTS:
 
                 path_to_leaf.append(current)
                 actions_to_leaf.append(action_index)
+                self.loss[current][action_index] += loss_constant
                 current = self.children[current][action_index]
 
     def expand(self, state):
@@ -66,7 +67,6 @@ class MCTS:
         for state_to_leaf, action_to_leaf in zip(path_to_leaf, actions_to_leaf):
             self.score[state_to_leaf][action_to_leaf] = max(self.score[state_to_leaf][action_to_leaf], reward)
             self.number_of_visits[state_to_leaf][action_to_leaf] += 1
-            self.loss[state_to_leaf][action_to_leaf] += loss_constant
 
     def get_most_promising_action_index(self, state):
         action_space_len = len(state.get_action_space())
