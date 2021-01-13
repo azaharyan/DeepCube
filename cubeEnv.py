@@ -99,12 +99,16 @@ class CubeEnv:
         self.cube(formula)
 
     def get_one_hot_state(self):
+        def comp(x):
+            res = list(x.facings.keys())
+            res.sort()
+            return res
         state = np.zeros((20, 24))
         i = 0
         corners = list(self.cube.select_type('corner'))
-        corners.sort(key=lambda x: hash(x))
+        corners.sort(key=comp)
         edges = list(self.cube.select_type('edge'))
-        edges.sort(key=lambda x: hash(x))
+        edges.sort(key=comp)
         for corner in corners:
             keys = list(corner.facings.keys())
             keys.sort()
