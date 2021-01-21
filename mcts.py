@@ -7,7 +7,7 @@ import numpy as np
 
 class MCTS:
 
-    def __init__(self, model, loss_constant = 4, exploration_constant = 150):
+    def __init__(self, model, loss_constant = 150, exploration_constant = 4):
         self.model = model
         self.children = dict()
         self.score = dict()
