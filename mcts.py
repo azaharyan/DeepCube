@@ -4,19 +4,18 @@ from collections import deque
 
 import numpy as np
 
-loss_constant = 100
-exploration_constant = 100
-
 
 class MCTS:
 
-    def __init__(self, model):
+    def __init__(self, model, loss_constant = 4, exploration_constant = 150):
         self.model = model
         self.children = dict()
         self.score = dict()
         self.number_of_visits = dict()
         self.probabilities = dict()
         self.loss = dict()
+        self.loss_constant = loss_constant
+        self.exploration_constant = exploration_constant
 
     def train(self, state):
         path_to_leaf, actions_to_leaf, leaf = self.traverse(state)
@@ -48,7 +47,7 @@ class MCTS:
 
                 path_to_leaf.append(current)
                 actions_to_leaf.append(action_index)
-                self.loss[current][action_index] += loss_constant
+                self.loss[current][action_index] += self.loss_constant
                 current = self.children[current][action_index]
 
     def expand(self, state):
@@ -74,7 +73,7 @@ class MCTS:
         state_all_actions_number_of_visits = sum(self.number_of_visits[state])
         u_plus_w_a = [0] * action_space_len
         for i in range(action_space_len):
-            u_st_a = exploration_constant \
+            u_st_a = self.exploration_constant \
                      * self.probabilities[state][i] \
                      * (math.sqrt(state_all_actions_number_of_visits) / (1 + self.number_of_visits[state][i]))
             u_plus_w_a[i] = u_st_a + self.score[state][i] - self.loss[state][i]
