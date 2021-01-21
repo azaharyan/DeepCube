@@ -1,3 +1,5 @@
+import time
+
 from cubeEnv import CubeEnv
 from mcts import MCTS
 from model import buildModel, compile_model
@@ -6,7 +8,7 @@ from tensorflow import keras
 if __name__ == "__main__":
 
     print(keras.__version__)
-    model = keras.models.load_model('saved_model')
+    model = keras.models.load_model("last_hope.hdf5")
 
     #for new model
     #model = buildModel(20 * 24)
@@ -17,12 +19,19 @@ if __name__ == "__main__":
 
     cube.render()
 
-    pair = (None, None)
-    while not pair[0]:
-        pair = mcts.train(cube)
+    start_time = time.time()
+    naive_action_indexes = None
+    while not naive_action_indexes:
+        naive_action_indexes = mcts.train(cube)
+    end_time = time.time()
 
     action_space = cube.get_action_space()
-    print("naive: ")
-    print([action_space[action_index] for action_index in pair[0]])
-    print("bfs: ")
-    print([action_space[action_index] for action_index in pair[1]])
+    print("{}s, naive: ".format(end_time - start_time))
+    print([action_space[action_index] for action_index in naive_action_indexes])
+
+    start_time = time.time()
+    bfs_action_indexes = mcts.bfs(cube)
+    end_time = time.time()
+
+    print("{}s, bfs afterwards: ".format(end_time - start_time))
+    print([action_space[action_index] for action_index in bfs_action_indexes])

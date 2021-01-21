@@ -30,11 +30,10 @@ class MCTS:
         for s in self.children_and_data[leaf][self.ch_i]:
             if s.is_solved():
                 actions_to_leaf.append(i)
-                actions_to_leaf_bfs = self.bfs(state)
-                return actions_to_leaf, actions_to_leaf_bfs
+                return actions_to_leaf
             i += 1
 
-        return None, None
+        return None
 
     def traverse(self, state):
         path_to_leaf = []
