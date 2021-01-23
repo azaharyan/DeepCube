@@ -9,7 +9,7 @@ You can create a model instead of using saved one by uncommenting the commented 
 To train a neural network executing adi.py is enough. However one my want to tweak the hyperparameters there(iterations,l,k).
 
 ## Prerequisites
-tensorflow
-pycuber
-numpy
-matplotlib
+1. tensorflow
+2. pycuber
+3. numpy
+4. matplotlib
