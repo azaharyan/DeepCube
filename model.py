@@ -1,6 +1,17 @@
 import tensorflow as tf
 from tensorflow import keras
 
+def buildModel_rnn(input_size):
+  input = keras.Input(shape=(input_size,))
+  expanded = tf.expand_dims(input, axis=-1)
+  first_layer = tf.keras.layers.LSTM(100, input_shape=(1,input_size))(expanded)
+  second_layer_value = tf.keras.layers.Dense(256, activation='elu')(first_layer)
+  second_layer_policy = tf.keras.layers.Dense(256, activation='elu')(first_layer)
+  value_output = tf.keras.layers.Dense(1, name="output_value")(second_layer_value)
+  policy_output = tf.keras.layers.Dense(12, activation='softmax', name="output_policy")(second_layer_policy)
+
+  model = tf.keras.Model(inputs=input, outputs=[value_output, policy_output])
+  return model
 
 def buildModel(input_size):
     input = keras.Input(shape=(input_size,))
