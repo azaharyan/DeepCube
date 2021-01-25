@@ -1,5 +1,5 @@
 # DeepCube
-Tensorflow/Keras implementation of DeepCube paper that solves the Rubik's Cube using Deep Reinforcement Learning. We used a feed-forward network and a RNN network to compare the result. Both models are augmented with Monte Carlo Tree Search for solving the cube itself.
+Tensorflow/Keras implementation of [DeepCube paper](https://arxiv.org/pdf/1805.07470.pdf) by McAleer et al. that solves the Rubik's Cube using Deep Reinforcement Learning. We used a feed-forward network and a RNN network to compare the result. Both models are augmented with Monte Carlo Tree Search for solving the cube itself.
 
 ## Prerequisites
 * [Tensorflow - v2.4.0](https://github.com/tensorflow/tensorflow)
